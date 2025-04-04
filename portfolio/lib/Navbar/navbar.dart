@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:portfolio/About/about.dart';
 import 'package:portfolio/Common/primary.dart';
 import 'package:portfolio/Home/home.dart';
 import 'package:portfolio/Navbar/textTile.dart';
+import 'package:portfolio/Skills/skills.dart';
 
 class Navbar extends StatefulWidget {
   const Navbar({super.key});
@@ -25,7 +27,7 @@ class _NavbarState extends State<Navbar> {
     if (key.currentContext != null) {
       Scrollable.ensureVisible(
         key.currentContext!,
-        duration: const Duration(seconds: 1),
+        duration: const Duration(milliseconds: 800),
         curve: Curves.easeInOut,
       );
     }
@@ -79,6 +81,8 @@ class _NavbarState extends State<Navbar> {
         child: Column(
           children: [
             Home(key: _homeKey),
+            AboutPage(key: _aboutKey),
+            Skills(key: _skillsKey),
             // AboutSection(key: _aboutKey),
             // SkillsSection(key: _skillsKey),
             // ContactSection(key: _contactKey),

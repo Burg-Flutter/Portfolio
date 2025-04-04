@@ -251,6 +251,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  scroll_snap_widgets:
+    dependency: "direct main"
+    description:
+      name: scroll_snap_widgets
+      sha256: "1ef775b31168b27f08da2edb3d5fb1b9b44e07e543d467263279da3eb73580c5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.7"
   sky_engine:
     dependency: transitive
     description: flutter

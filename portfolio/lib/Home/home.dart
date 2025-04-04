@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:portfolio/Common/primary.dart';
 
@@ -9,15 +10,42 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final List<String> _currentText = [
+    "I am a Flutter Developer",
+    "I am a Website Developer",
+    "I am a Backend Developer",
+  ];
+
+  int _currentIndex = 0;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Start the periodic timer
+    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
+      setState(() {
+        _currentIndex = (_currentIndex + 1) % _currentText.length;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel(); // Clean up the timer
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: MediaQuery.of(context).size.height, // Full height
-      color: Colors.white, // Background color
+      height: MediaQuery.of(context).size.height,
+      color: Colors.white,
       child: Stack(
         children: [
-          // Background Image with Fade Effect
+          // Background Image with Shader Fade Effect
           Positioned.fill(
             child: ShaderMask(
               shaderCallback: (Rect bounds) {
@@ -29,9 +57,9 @@ class _HomeState extends State<Home> {
                   tileMode: TileMode.clamp,
                 ).createShader(bounds);
               },
-              blendMode: BlendMode.srcATop, // Alternative blend mode
-              child: Image.network(
-                'https://imgs.search.brave.com/9crHZQvkWFjVOl4HMI_1nfFFUI-hl5KYK51ST81O_Fw/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly93d3cu/aXN0b2NrcGhvdG8u/Y29tL3Jlc291cmNl/cy9pbWFnZXMvUGhv/dG9GVExQL0pvYnND/YXJlZXJzLTkwMTU2/ODY2MC5qcGc', // Replace with actual image
+              blendMode: BlendMode.srcATop,
+              child: Image.asset(
+                'assets/images/logo.png',
                 fit: BoxFit.cover,
                 width: MediaQuery.of(context).size.width,
                 height: double.infinity,
@@ -39,7 +67,7 @@ class _HomeState extends State<Home> {
             ),
           ),
 
-          // Text Positioned on the Left Side
+          // Text Section
           Positioned(
             left: 40,
             top: MediaQuery.of(context).size.height * 0.4,
@@ -55,12 +83,27 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                Text(
-                  "I am a Flutter Developer",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
-                    color: reversePrimaryColor,
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 800),
+                  transitionBuilder:
+                      (child, animation) => FadeTransition(
+                        opacity: animation,
+                        child: SlideTransition(
+                          position: Tween<Offset>(
+                            begin: Offset(0, 0.5),
+                            end: Offset.zero,
+                          ).animate(animation),
+                          child: child,
+                        ),
+                      ),
+                  child: Text(
+                    _currentText[_currentIndex],
+                    key: ValueKey<int>(_currentIndex),
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w500,
+                      color: reversePrimaryColor,
+                    ),
                   ),
                 ),
               ],
