@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
-  Typography,
   Box,
   Button,
   IconButton,
@@ -12,6 +11,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  ListItemButton,
   useMediaQuery,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -54,12 +54,7 @@ const Header: React.FC = () => {
         }}
       >
         {/* Logo / Title */}
-        <Image
-          src="/harshal_logo.png"
-          alt="Logo"
-          width={100}
-          height={100}
-        />
+        <Image src="/harshal_logo.png" alt="Logo" width={100} height={100} />
 
         {/* Desktop Nav */}
         {!isMobile && (
@@ -110,16 +105,14 @@ const Header: React.FC = () => {
             >
               <List>
                 {sections.map((section) => (
-                  <ListItem
-                    button
-                    key={section}
-                    onClick={() => handleScroll(section)}
-                  >
-                    <ListItemText
-                      primary={
-                        section.charAt(0).toUpperCase() + section.slice(1)
-                      }
-                    />
+                  <ListItem key={section} disablePadding>
+                    <ListItemButton onClick={() => handleScroll(section)}>
+                      <ListItemText
+                        primary={
+                          section.charAt(0).toUpperCase() + section.slice(1)
+                        }
+                      />
+                    </ListItemButton>
                   </ListItem>
                 ))}
               </List>

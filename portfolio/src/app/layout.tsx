@@ -27,8 +27,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="bg-white text-black">
         <Header />
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          {/* <ClientWrapper />
-          <Toaster /> */}
+          <ClientWrapper />
+          <Toaster />
           <CursorTrail />
           <FloatingParticlesBackground />
           <main className="min-h-screen p-4">{children}</main>

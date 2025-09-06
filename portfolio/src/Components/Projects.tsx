@@ -6,35 +6,40 @@ import {
   Typography,
   Card,
   CardContent,
-  IconButton,
+  Button,
   Menu,
   MenuItem,
   useMediaQuery,
 } from "@mui/material";
 import { motion } from "framer-motion";
 import Grid from "@mui/material/Grid";
-import LaunchIcon from "@mui/icons-material/Launch";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-const projects = [
+type Project = {
+  title: string;
+  description: string;
+  links?: {
+    github?: string;
+    live?: string;
+  };
+};
+
+const projects: Project[] = [
   {
     title: "SafeSteps",
     description:
       "A comprehensive women’s safety app with live tracking, SOS alerts, and privacy-focused features.",
-    // links: {
-    //   github: "https://github.com/yourusername/safesteps",
-    //   live: "https://safesteps.example.com",
-    // },
+    links: {
+      github: "https://github.com/Burg-Flutter",
+    },
   },
   {
     title: "Collabeat",
     description:
-      "A collaborative Flutter app enabling music creators to jam, share, and build tracks in real-time.The application is Live on Playstore",
-    // links: {
-    //   github: "https://github.com/yourusername/collabeat",
-    //   live: "https://collabeat.example.com",
-    // },
-  }
+      "A collaborative Flutter app enabling music creators to jam, share, and build tracks in real-time. The application is Live on Playstore",
+    links: {
+      live: "https://play.google.com/store/apps/details?id=com.collabs.collabeat&pcampaignid=web_share",
+    },
+  },
 ];
 
 const MotionCard = motion(Card);
@@ -42,14 +47,16 @@ const MotionCard = motion(Card);
 const Projects: React.FC = () => {
   const isMobile = useMediaQuery("(max-width:1023px)");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  const handleMenuOpen = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    project: any
+  const handleCardClick = (
+    event: React.MouseEvent<HTMLElement>,
+    project: Project
   ) => {
-    setAnchorEl(event.currentTarget);
-    setSelectedProject(project);
+    if (isMobile) {
+      setAnchorEl(event.currentTarget);
+      setSelectedProject(project);
+    }
   };
 
   const handleMenuClose = () => {
@@ -78,8 +85,9 @@ const Projects: React.FC = () => {
 
       <Grid container spacing={4} justifyContent="center">
         {projects.map((project, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
             <MotionCard
+              onClick={(e) => handleCardClick(e, project)}
               whileHover={{
                 scale: 1.05,
                 boxShadow: "0px 8px 25px rgba(0,224,255,0.3)",
@@ -94,8 +102,7 @@ const Projects: React.FC = () => {
                 border: "1px solid rgba(255,255,255,0.1)",
                 color: "white",
                 height: "100%",
-                // width:'300px',
-                cursor: "pointer",
+                cursor: isMobile ? "pointer" : "default",
                 backdropFilter: "blur(8px)",
                 position: "relative",
                 overflow: "hidden",
@@ -114,49 +121,49 @@ const Projects: React.FC = () => {
                   {project.description}
                 </Typography>
 
-                {/* Desktop: show links on hover */}
-                {/* Desktop: show links on hover */}
-                {/* {!isMobile && (
-                  <Box
-                    sx={{
-                      opacity: 0,
-                      transition: "opacity 0.3s",
-                      position: "absolute",
-                      top: 8,
-                      right: 8,
-                      display: "flex",
-                      gap: 1,
-                      "&:hover": { opacity: 1 },
-                    }}
-                  >
-                    <IconButton
-                      href={project.links.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      sx={{ color: "#00E0FF" }}
-                    >
-                      <LaunchIcon />
-                    </IconButton>
-                    <IconButton
-                      href={project.links.live}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      sx={{ color: "#00E0FF" }}
-                    >
-                      <LaunchIcon />
-                    </IconButton>
+                {/* Inline buttons only on desktop */}
+                {!isMobile && project.links && (
+                  <Box sx={{ display: "flex", gap: 2 }}>
+                    {project.links.github && (
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        sx={{
+                          borderColor: "#00E0FF",
+                          color: "#00E0FF",
+                          "&:hover": {
+                            backgroundColor: "rgba(0,224,255,0.1)",
+                            borderColor: "#00E0FF",
+                          },
+                        }}
+                        href={project.links.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        GitHub
+                      </Button>
+                    )}
+                    {project.links.live && (
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        sx={{
+                          borderColor: "#00E0FF",
+                          color: "#00E0FF",
+                          "&:hover": {
+                            backgroundColor: "rgba(0,224,255,0.1)",
+                            borderColor: "#00E0FF",
+                          },
+                        }}
+                        href={project.links.live}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Live Demo
+                      </Button>
+                    )}
                   </Box>
-                )} */}
-
-                {/* Mobile: show menu button */}
-                {/* {isMobile && (
-                  <IconButton
-                    onClick={(e) => handleMenuOpen(e, project)}
-                    sx={{ color: "#00E0FF" }}
-                  >
-                    <MoreVertIcon />
-                  </IconButton>
-                )} */}
+                )}
               </CardContent>
             </MotionCard>
           </Grid>
@@ -169,27 +176,27 @@ const Projects: React.FC = () => {
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
       >
-        {selectedProject && (
-          <>
-            <MenuItem
-              component="a"
-              href={selectedProject.links.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={handleMenuClose}
-            >
-              GitHub
-            </MenuItem>
-            <MenuItem
-              component="a"
-              href={selectedProject.links.live}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={handleMenuClose}
-            >
-              Live Demo
-            </MenuItem>
-          </>
+        {selectedProject?.links?.github && (
+          <MenuItem
+            component="a"
+            href={selectedProject.links.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={handleMenuClose}
+          >
+            GitHub
+          </MenuItem>
+        )}
+        {selectedProject?.links?.live && (
+          <MenuItem
+            component="a"
+            href={selectedProject.links.live}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={handleMenuClose}
+          >
+            Live Demo
+          </MenuItem>
         )}
       </Menu>
     </Box>

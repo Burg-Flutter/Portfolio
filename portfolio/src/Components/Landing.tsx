@@ -76,7 +76,7 @@ const Landing: React.FC = () => {
       {/* Text Section */}
       <Box ref={textRef} sx={{ flex: 1, zIndex: 2, px: 4, py: 6 }}>
         <Typography variant="h3" fontWeight={700} gutterBottom>
-          Hey, I'm Harshal 👋
+          Hey, I&apos;m Harshal 👋
         </Typography>
 
         <Typography variant="h4" fontWeight={400} mb={2}>
